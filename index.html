@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1-Mavzu: Amaliy astronomiya asoslari</title>
+    <!-- Plotly.js for 3D Sphere -->
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: #161f30;
+            --accent: #38bdf8;
+            --accent-hover: #0284c7;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --border: #1e293b;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--accent);
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #60a5fa;
+            font-size: 1.5rem;
+            margin-top: 0;
+        }
+
+        .section-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .theory-box {
+            background-color: rgba(255, 255, 255, 0.03);
+            border-left: 4px solid var(--accent);
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .sim-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            background: #0d1322;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        canvas {
+            background-color: #050811;
+            border-radius: 6px;
+            max-width: 100%;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px;
+            border-radius: 6px;
+        }
+
+        label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        input[type="range"] {
+            accent-color: var(--accent);
+        }
+
+        button {
+            background-color: var(--accent);
+            color: #000;
+            border: none;
+            padding: 8px 16px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--accent-hover);
+            color: #fff;
+        }
+
+        .plotly-chart {
+            width: 100%;
+            height: 500px;
+        }
+
+        ol, ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            color: #f472b6;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Amaliy astronomiya asoslari</h1>
+
+    <!-- REJA 1 -->
+    <div class="section-card">
+        <h2>Reja 1: Yoritgichlarning sutkalik koʼrinma harakatlari. Yulduz turkumlari</h2>
+        <div class="theory-box">
+            <p><strong>Nazariy ma'lumot:</strong> Yoritgichlarning (Quyosh, Oy, yulduzlar) osmon boʻylab sharqdan chiqib gʻarbga batishi ularning haqiqiy fazoviy harakati emas, balki <strong>Yerning oʻz oʻqi atrofida gʻarbdan sharqqa qarab sutkalik aylanishi</strong> natijasidagi koʻrinma harakatidir.</p>
+            <ul>
+                <li><strong>Shimoliy yarimshar:</strong> Yulduzlar Qutb yulduzi (Polaris) atrofida soat strelkasiga qarama-qarshi aylanadi.</li>
+                <li><strong>Janubiy yarimshar:</strong> Yulduzlar Janubiy Dunyo Qutbi atrofida soat strelkasi yoʻnalishida aylanadi.</li>
+                <li><strong>Yulduz turkumlari:</strong> IAU (Xalqaro Astronomiya Ittifoqi) boʻyicha osmon sferasi aniq chegaralangan <strong>88 ta yulduz turkumiga</strong> boʻlingan.</li>
+            </ul>
+        </div>
+
+        <div class="sim-container">
+            <h3>Interaktiv Simulyatsiya: Star Trails (Yulduzlar izi)</h3>
+            <canvas id="starCanvas" width="700" height="400"></canvas>
+            <div class="controls">
+                <label>Geografik kenglik (&phi;): 
+                    <input type="range" id="lat1" min="-90" max="90" value="41">
+                    <span id="lat1Val">41&deg;</span>
+                </label>
+                <label>Vaqt tezligi: 
+                    <input type="range" id="speed1" min="1" max="500" value="100">
+                    <span id="speed1Val">100x</span>
+                </label>
+                <button onclick="clearStarTrails()">Izlarni tozalash</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- REJA 2 -->
+    <div class="section-card">
+        <h2>Reja 2: Yerning oʼz oʼqi atrofida aylanishiga dalillar. Fuko mayatnigi</h2>
+        <div class="theory-box">
+            <p><strong>Nazariy ma'lumot:</strong> Yerning oʻz oʻqi atrofida aylanishini tasdiqlovchi asosiy fizik dalil <strong>Fuko mayatnigi (1851-y)</strong> hisoblanadi. Inersiya qonuniga koʻra, tebranayotgan mayatnik oʻz tebranish tekisligini fazoda saqlashga intiladi, Yer esa uning ostida aylanadi.</p>
+            <p>Tebranish tekisligining burilish burchak tezligi formulasi:</p>
+            <p style="text-align: center; font-size: 1.2rem; color: var(--accent);">
+                &omega; = &Omega; &middot; sin(&phi;)
+            </p>
+            <p><em>Bu yerda: &Omega; = 15.041&deg;/soat (Yerning aylanish tezligi), &phi; — geografik kenglik. Qutbda (&phi;=90&deg;) burilish 24 soatda 360&deg; bo'ladi, Ekvatorda (&phi;=0&deg;) burilish sodir bo'lmaydi.</em></p>
+        </div>
+
+        <div class="sim-container">
+            <h3>Interaktiv Simulyatsiya: Fuko Mayatnigi (Yuqoridan va Yon ko'rinish)</h3>
+            <canvas id="foucaultCanvas" width="700" height="400"></canvas>
+            <div class="controls">
+                <label>Geografik kenglik (&phi;): 
+                    <input type="range" id="lat2" min="0" max="90" value="41">
+                    <span id="lat2Val">41&deg;</span>
+                </label>
+                <label>Simulyatsiya tezligi: 
+                    <input type="range" id="speed2" min="1" max="100" value="20">
+                    <span id="speed2Val">20x</span>
+                </label>
+                <button onclick="resetFoucault()">Qaytadan boshlash</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- REJA 3 -->
+    <div class="section-card">
+        <h2>Reja 3: Osmon sferasi, uning asosiy nuqta, aylana va chiziqlari</h2>
+        <div class="theory-box">
+            <p><strong>Asosiy tushunchalar:</strong></p>
+            <ul>
+                <li><strong>Zenit (Z) va Nadir (Z'):</strong> Kuzatuvchi tepasidagi va oyoq ostidagi mos ravishda eng yuqori hamda quyi nuqtalar.</li>
+                <li><strong>Dunyo qutblari (P va P'):</strong> Yer aylanish o'qining osmon sferasi bilan kesishish nuqtalari.</li>
+                <li><strong>Matematik ufq:</strong> Vertikal chiziqqa perpendikulyar bo'lgan va sferani teng ikkiga bo'luvchi karta aylana.</li>
+                <li><strong>Osmon ekvatori:</strong> Dunyo o'qiga perpendikulyar bo'lgan katta aylana.</li>
+                <li><strong>Ekliptika:</strong> Quyoshning osmon sferasi bo'ylab yillik ko'rinma harakat yo'li (Ekvator bilan 23.5&deg; burchak hosil qiladi).</li>
+            </ul>
+        </div>
+
+        <div class="sim-container">
+            <h3>Interaktiv 3D Simulyatsiya: Osmon Sferasi</h3>
+            <div id="plotlySphere" class="plotly-chart"></div>
+            <div class="controls">
+                <label>Geografik kenglik (&phi;): 
+                    <input type="range" id="lat3" min="-90" max="90" value="41">
+                    <span id="lat3Val">41&deg;</span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOPSHIRIQLAR -->
+    <div class="section-card">
+        <h2>Talabalar uchun amaliy topshiriqlar</h2>
+        <ol>
+            <li><strong>1-simulyatsiya bo'yicha:</strong> Kenglikni &phi; = 90&deg; (Qutb) va &phi; = 0&deg; (Ekvator) o'zgartirib ko'ring. Yulduzlar harakat traektoriyasi ufqqa nisbatan qanday o'zgarishini tahlil qiling.</li>
+            <li><strong>2-simulyatsiya bo'yicha:</strong> &phi; = 41&deg; (O'zbekiston kengligi) uchun Fuko mayatnigi tebranish tekisligi 1 soatda necha darajaga burilishini nazariy hisoblang: <code>&omega; = 15.041&deg; &middot; sin(41&deg;)</code> va simulyatsiya bilan solishtiring.</li>
+            <li><strong>3-simulyatsiya bo'yicha:</strong> 3D sferada kenglik o'zgarganda Dunyo qutbi balandligi (h<sub>P</sub> = &phi;) va Osmon ekvatori og'ishi o'rtasidagi bog'liqlikni aniqlang.</li>
+        </ol>
+    </div>
+</div>
+
+<script>
+    // ==========================================
+    // REJA 1: STAR TRAILS SIMULATION
+    // ==========================================
+    const canvas1 = document.getElementById('starCanvas');
+    const ctx1 = canvas1.getContext('2d');
+    let lat1 = 41;
+    let speed1 = 100;
+    
+    let stars = [];
+    const numStars = 90;
+
+    function initStars() {
+        stars = [];
+        for(let i=0; i<numStars; i++) {
+            stars.push({
+                r: Math.random() * 180 + 10,
+                theta: Math.random() * Math.PI * 2,
+                size: Math.random() * 1.5 + 0.5,
+                color: ['#ffffff', '#bfdbfe', '#fef08a', '#fca5a5'][Math.floor(Math.random()*4)]
+            });
+        }
+    }
+
+    function clearStarTrails() {
+        ctx1.fillStyle = '#050811';
+        ctx1.fillRect(0, 0, canvas1.width, canvas1.height);
+    }
+
+    function drawStars() {
+        // Subtle fade effect for trail
+        ctx1.fillStyle = 'rgba(5, 8, 17, 0.03)';
+        ctx1.fillRect(0, 0, canvas1.width, canvas1.height);
+
+        const cx = canvas1.width / 2;
+        // Shift pole position based on latitude
+        const cy = canvas1.height / 2 + (90 - lat1) * 1.5 - 60;
+
+        // Draw Pole Star
+        ctx1.fillStyle = '#38bdf8';
+        ctx1.beginPath();
+        ctx1.arc(cx, cy, 3, 0, Math.PI * 2);
+        ctx1.fill();
+        ctx1.fillStyle = '#9ca3af';
+        ctx1.font = '12px sans-serif';
+        ctx1.fillText('Qutb yulduzi (P)', cx + 8, cy + 4);
+
+        // Update and draw stars
+        stars.forEach(star => {
+            star.theta += 0.0001 * speed1;
+
+            let x = cx + star.r * Math.cos(star.theta);
+            let y = cy + star.r * Math.sin(star.theta) * Math.sin(lat1 * Math.PI / 180);
+
+            if(y < canvas1.height - 30) { // Horizon filter
+                ctx1.fillStyle = star.color;
+                ctx1.beginPath();
+                ctx1.arc(x, y, star.size, 0, Math.PI * 2);
+                ctx1.fill();
+            }
+        });
+
+        // Horizon line
+        ctx1.fillStyle = '#0f172a';
+        ctx1.fillRect(0, canvas1.height - 30, canvas1.width, 30);
+        ctx1.strokeStyle = '#38bdf8';
+        ctx1.beginPath();
+        ctx1.moveTo(0, canvas1.height - 30);
+        ctx1.lineTo(canvas1.width, canvas1.height - 30);
+        ctx1.stroke();
+
+        ctx1.fillStyle = '#9ca3af';
+        ctx1.font = '12px sans-serif';
+        ctx1.fillText('Ufq Chizig\'i (Horizon)', 10, canvas1.height - 10);
+
+        requestAnimationFrame(drawStars);
+    }
+
+    document.getElementById('lat1').addEventListener('input', (e) => {
+        lat1 = parseFloat(e.target.value);
+        document.getElementById('lat1Val').innerText = lat1 + '°';
+        clearStarTrails();
+    });
+    document.getElementById('speed1').addEventListener('input', (e) => {
+        speed1 = parseFloat(e.target.value);
+        document.getElementById('speed1Val').innerText = speed1 + 'x';
+    });
+
+    initStars();
+    clearStarTrails();
+    drawStars();
+
+    // ==========================================
+    // REJA 2: FOUCAULT PENDULUM SIMULATION
+    // ==========================================
+    const canvas2 = document.getElementById('foucaultCanvas');
+    const ctx2 = canvas2.getContext('2d');
+    let lat2 = 41;
+    let speed2 = 20;
+
+    let pendulumAngle = 0; // Swing phase
+    let planeAngle = 0;    // Rotation angle of pendulum plane
+    let pins = [];
+    const numPins = 24;
+
+    function initPins() {
+        pins = [];
+        for(let i=0; i<numPins; i++) {
+            pins.push({
+                angle: (i * Math.PI * 2) / numPins,
+                standing: true
+            });
+        }
+    }
+
+    function resetFoucault() {
+        planeAngle = 0;
+        pendulumAngle = 0;
+        initPins();
+    }
+
+    function drawFoucault() {
+        ctx2.fillStyle = '#050811';
+        ctx2.fillRect(0, 0, canvas2.width, canvas2.height);
+
+        // Update physics
+        pendulumAngle += 0.05;
+        // w = Omega * sin(lat)
+        const omega = (15.041 * Math.sin(lat2 * Math.PI / 180) * (Math.PI / 180) / 3600) * speed2 * 20;
+        planeAngle += omega;
+
+        const currentSwing = Math.sin(pendulumAngle) * 120;
+
+        // --- TOP VIEW (Left side) ---
+        const cx1 = 200, cy1 = 200, r = 140;
+        
+        ctx2.strokeStyle = '#334155';
+        ctx2.lineWidth = 2;
+        ctx2.beginPath();
+        ctx2.arc(cx1, cy1, r, 0, Math.PI * 2);
+        ctx2.stroke();
+
+        // Draw Pins
+        pins.forEach(pin => {
+            let px = cx1 + Math.cos(pin.angle) * r;
+            let py = cy1 + Math.sin(pin.angle) * r;
+
+            // Check collision with pendulum head
+            let headX = cx1 + Math.cos(planeAngle) * currentSwing;
+            let headY = cy1 + Math.sin(planeAngle) * currentSwing;
+
+            let dist = Math.hypot(px - headX, py - headY);
+            if(dist < 15) pin.standing = false;
+
+            ctx2.fillStyle = pin.standing ? '#38bdf8' : '#ef4444';
+            ctx2.beginPath();
+            ctx2.arc(px, py, pin.standing ? 5 : 3, 0, Math.PI * 2);
+            ctx2.fill();
+        });
+
+        // Swing trajectory line
+        ctx2.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+        ctx2.beginPath();
+        ctx2.moveTo(cx1 - Math.cos(planeAngle)*r, cy1 - Math.sin(planeAngle)*r);
+        ctx2.lineTo(cx1 + Math.cos(planeAngle)*r, cy1 + Math.sin(planeAngle)*r);
+        ctx2.stroke();
+
+        // Pendulum Head (Top view)
+        let hx = cx1 + Math.cos(planeAngle) * currentSwing;
+        let hy = cy1 + Math.sin(planeAngle) * currentSwing;
+        ctx2.fillStyle = '#f59e0b';
+        ctx2.beginPath();
+        ctx2.arc(hx, hy, 8, 0, Math.PI * 2);
+        ctx2.fill();
+
+        ctx2.fillStyle = '#9ca3af';
+        ctx2.font = '14px sans-serif';
+        ctx2.fillText('Yuqoridan ko\'rinish (Shkala)', 120, 370);
+
+        // --- SIDE VIEW (Right side) ---
+        const cx2 = 520, cy2 = 80;
+        let bobX = cx2 + Math.sin(pendulumAngle) * 80;
+        let bobY = cy2 + 220;
+
+        // Cable
+        ctx2.strokeStyle = '#94a3b8';
+        ctx2.beginPath();
+        ctx2.moveTo(cx2, cy2);
+        ctx2.lineTo(bobX, bobY);
+        ctx2.stroke();
+
+        // Bob
+        ctx2.fillStyle = '#f59e0b';
+        ctx2.beginPath();
+        ctx2.arc(bobX, bobY, 14, 0, Math.PI * 2);
+        ctx2.fill();
+
+        // Floor
+        ctx2.strokeStyle = '#334155';
+        ctx2.beginPath();
+        ctx2.moveTo(380, cy2 + 235);
+        ctx2.lineTo(660, cy2 + 235);
+        ctx2.stroke();
+
+        ctx2.fillStyle = '#9ca3af';
+        ctx2.fillText('Yon ko\'rinish', 480, 370);
+
+        requestAnimationFrame(drawFoucault);
+    }
+
+    document.getElementById('lat2').addEventListener('input', (e) => {
+        lat2 = parseFloat(e.target.value);
+        document.getElementById('lat2Val').innerText = lat2 + '°';
+    });
+    document.getElementById('speed2').addEventListener('input', (e) => {
+        speed2 = parseFloat(e.target.value);
+        document.getElementById('speed2Val').innerText = speed2 + 'x';
+    });
+
+    initPins();
+    drawFoucault();
+
+    // ==========================================
+    // REJA 3: 3D CELESTIAL SPHERE (PLOTLY)
+    // ==========================================
+    function draw3DSphere(phi) {
+        const rad = phi * Math.PI / 180;
+        
+        // Sphere Wireframe
+        const u = [], v = [], x = [], y = [], z = [];
+        for (let i = 0; i <= 20; i++) {
+            let uVal = i * Math.PI / 10;
+            for (let j = 0; j <= 20; j++) {
+                let vVal = j * 2 * Math.PI / 20;
+                x.push(Math.cos(uVal) * Math.sin(vVal));
+                y.push(Math.sin(uVal) * Math.sin(vVal));
+                z.push(Math.cos(vVal));
+            }
+        }
+
+        // Horizon Circle (Z = 0)
+        const hX = [], hY = [], hZ = [];
+        for (let t = 0; t <= 2 * Math.PI + 0.1; t += 0.1) {
+            hX.push(Math.cos(t));
+            hY.push(Math.sin(t));
+            hZ.push(0);
+        }
+
+        // Celestial Equator (Tilted by 90 - phi)
+        const eqX = [], eqY = [], eqZ = [];
+        const tilt = Math.PI / 2 - rad;
+        for (let t = 0; t <= 2 * Math.PI + 0.1; t += 0.1) {
+            eqX.push(Math.cos(t));
+            eqY.push(Math.sin(t) * Math.cos(tilt));
+            eqZ.push(Math.sin(t) * Math.sin(tilt));
+        }
+
+        // Celestial Axis (P - P')
+        const axisX = [0, 0];
+        const axisY = [-Math.cos(rad), Math.cos(rad)];
+        const axisZ = [-Math.sin(rad), Math.sin(rad)];
+
+        const data = [
+            // Wireframe
+            {
+                type: 'scatter3d',
+                mode: 'markers',
+                x: x, y: y, z: z,
+                marker: { size: 1, color: '#334155', opacity: 0.3 },
+                name: 'Sfera'
+            },
+            // Horizon
+            {
+                type: 'scatter3d',
+                mode: 'lines',
+                x: hX, y: hY, z: hZ,
+                line: { color: '#22c55e', width: 4 },
+                name: 'Matematik Ufq'
+            },
+            // Equator
+            {
+                type: 'scatter3d',
+                mode: 'lines',
+                x: eqX, y: eqY, z: eqZ,
+                line: { color: '#38bdf8', width: 4 },
+                name: 'Osmon Ekvatori'
+            },
+            // Celestial Axis
+            {
+                type: 'scatter3d',
+                mode: 'lines+text',
+                x: axisX, y: axisY, z: axisZ,
+                line: { color: '#ef4444', width: 6 },
+                text: ["P' (Janubiy Qutb)", "P (Shimoliy Qutb)"],
+                textposition: 'top center',
+                name: 'Dunyo O\'qi'
+            },
+            // Zenith / Nadir
+            {
+                type: 'scatter3d',
+                mode: 'markers+text',
+                x: [0, 0], y: [0, 0], z: [1, -1],
+                marker: { color: '#f59e0b', size: 6 },
+                text: ['Zenit (Z)', 'Nadir (Z\')'],
+                textposition: 'top center',
+                name: 'Zenit / Nadir'
+            }
+        ];
+
+        const layout = {
+            paper_bgcolor: '#0d1322',
+            plot_bgcolor: '#0d1322',
+            margin: { l: 0, r: 0, b: 0, t: 0 },
+            scene: {
+                xaxis: { visible: false },
+                yaxis: { visible: false },
+                zaxis: { visible: false },
+                camera: {
+                    eye: { x: 1.5, y: 1.5, z: 1.2 }
+                }
+            },
+            legend: {
+                font: { color: '#f3f4f6' },
+                x: 0, y: 1
+            }
+        };
+
+        Plotly.newPlot('plotlySphere', data, layout, {responsive: true});
+    }
+
+    document.getElementById('lat3').addEventListener('input', (e) => {
+        let val = parseFloat(e.target.value);
+        document.getElementById('lat3Val').innerText = val + '°';
+        draw3DSphere(val);
+    });
+
+    draw3DSphere(41);
+</script>
+
+</body>
+  </html>
