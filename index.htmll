@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Astronomiya nimani o'rganadi?</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{overflow-x:hidden}
+  body{background:#0b0f19;color:#e2e8f0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.6;padding:16px}
+  .wrap{max-width:760px;margin:0 auto}
+  header{padding:24px 0 16px}
+  .kicker{color:#38bdf8;font-size:14px;letter-spacing:.5px;text-transform:uppercase}
+  h1{font-size:26px;margin:6px 0 10px;line-height:1.25}
+  h2{font-size:20px;color:#f1f5f9;margin-bottom:12px}
+  h3{font-size:16px;color:#38bdf8;margin:18px 0 8px}
+  p{margin-bottom:10px;color:#cbd5e1}
+  .card{background:#161f30;border-radius:16px;padding:20px;margin-bottom:20px;border:1px solid #1e293b}
+  canvas,svg{display:block;width:100%;height:auto;max-width:100%;border-radius:12px;background:#0f172a}
+  .controls{display:grid;gap:12px;margin:14px 0}
+  label{display:block;font-size:14px;color:#94a3b8}
+  label span{color:#38bdf8;font-weight:600}
+  input[type=range]{width:100%;accent-color:#38bdf8;margin-top:6px}
+  .btns{display:flex;flex-wrap:wrap;gap:8px}
+  button{background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:10px;padding:9px 14px;font-size:14px;cursor:pointer}
+  button:hover{border-color:#38bdf8}
+  button.active,button.primary{background:#0c4a6e;border-color:#38bdf8;color:#e0f2fe}
+  .readout{font-size:13px;color:#94a3b8;background:#0f172a;border-radius:10px;padding:10px 12px;display:flex;flex-wrap:wrap;gap:12px}
+  .readout b{color:#38bdf8;font-weight:600}
+  .note{font-size:13px;color:#94a3b8;margin-top:10px}
+  details.why{margin-top:14px;background:#0f172a;border-radius:12px;border:1px solid #1e293b;padding:12px 14px}
+  details.why summary{cursor:pointer;color:#38bdf8;font-weight:600}
+  details.why div{margin-top:8px;color:#cbd5e1;font-size:15px}
+  .timeline{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+  .tl{font-size:13px;padding:7px 11px}
+  .infobox{background:#0f172a;border-left:3px solid #38bdf8;border-radius:10px;padding:12px 14px;margin:12px 0;min-height:70px;color:#cbd5e1;font-size:15px}
+  .infobox strong{color:#38bdf8}
+  .task{background:#0f172a;border-radius:12px;padding:12px 14px;margin-bottom:10px;border:1px solid #1e293b}
+  .task b{color:#38bdf8}
+  .quiz .q{margin-bottom:16px}
+  .quiz .q p{color:#f1f5f9;font-weight:600;margin-bottom:6px}
+  .quiz label{color:#cbd5e1;font-size:15px;display:flex;gap:8px;align-items:center;padding:4px 0;cursor:pointer}
+  .quiz input{accent-color:#38bdf8}
+  #result{margin-top:10px;font-size:16px;font-weight:600;color:#38bdf8}
+  .good{color:#4ade80 !important}.bad{color:#f87171 !important}
+  svg text{font-family:system-ui,sans-serif}
+  .node{cursor:pointer}
+  .node:hover circle{stroke:#38bdf8;stroke-width:3}
+  footer{color:#64748b;font-size:13px;text-align:center;padding:10px 0 30px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">11-sinf · Astronomiya · 1-§</div>
+  <h1>Astronomiya nimani o'rganadi? Uning rivojlanish tarixi va boshqa fanlar bilan aloqasi</h1>
+  <p>Bu sahifada mavzuning uch qismi interaktiv simulyatsiyalar bilan tushuntiriladi. Har bir bo'limda slayder va tugmalarni o'zgartirib, natijani kuzatishingiz mumkin.</p>
+</header>
+
+<!-- 1-BAND -->
+<section class="card" id="s1">
+  <h2>1. Astronomiya fanining ta'rifi va o'rganish predmeti</h2>
+  <p><b>Astronomiya</b> — osmon jismlari (yulduzlar, Quyosh, Oy, sayyoralar, kometalar, galaktikalar) va koinotning tuzilishi, harakati, kelib chiqishi hamda rivojlanishini o'rganadigan fan. Ism yunoncha <i>astron</i> (yulduz) va <i>nomos</i> (qonun) so'zlaridan olingan.</p>
+  <p>Astronomiya asosan <b>kuzatuvga</b> tayanadi: osmon jismlarini laboratoriyada hosil qilib bo'lmaydi, shuning uchun olimlar ularning nurini, o'rnini va harakatini teleskop va boshqa asboblar bilan qayd etadi.</p>
+  <p>Fan bir necha yo'nalishga bo'linadi: <b>astrometriya</b> (osmon jismlarining o'rnini aniqlash), <b>samoviy mexanika</b> (harakat qonunlari), <b>astrofizika</b> (jismlarning fizik xossalari va tarkibi) va <b>kosmologiya</b> (koinotning umumiy tuzilishi).</p>
+  <p>Yerning o'z o'qi atrofida aylanishi tufayli yulduzlar osmonda sharqdan chiqib g'arbga botgandek ko'rinadi. Quyidagi simulyatsiyada shu harakatni va kenglikka bog'liq o'zgarishlarni kuzating.</p>
+
+  <h3>Simulyatsiya: osmon sferasi va yoritgichlar harakati</h3>
+  <canvas id="sky" width="720" height="300"></canvas>
+  <div class="controls">
+    <label>Kuzatuv kengligi φ: <span id="latVal">40</span>°
+      <input type="range" id="lat" min="0" max="90" step="1" value="40">
+    </label>
+    <label>Soat burchagi (vaqt): <span id="hourVal">0.00</span> soat
+      <input type="range" id="hour" min="0" max="24" step="0.05" value="0">
+    </label>
+    <div class="btns">
+      <button id="play1" class="primary">▶ Boshlash</button>
+      <button id="reset1">↺ Boshlang'ich holat</button>
+      <button id="samarqand">Samarqand (φ≈39.7°)</button>
+      <button id="ekvator">Ekvator (φ=0°)</button>
+      <button id="qutb">Qutb (φ=90°)</button>
+    </div>
+  </div>
+  <div class="readout" id="readout1"></div>
+  <p class="note">Gorizontal o'q — azimut (N→E→S→W), vertikal o'q — balandlik. Pastki yarim — gorizont ostida. Qutb yulduzi balandligi kuzatuv kengligiga teng: <b>h = φ</b>. Ekvatorda yulduzlar gorizontga perpendikulyar (vertikal) ko'tariladi, qutbda esa gorizontal aylanadi.</p>
+
+  <details class="why">
+    <summary>Nima uchun?</summary>
+    <div>Nega Qutb yulduzi doim bir joyda turadi va uning balandligi nima uchun kenglikka teng? Chunki Yer o'qi osmon qutbiga deyarli yo'nalgan, shuning uchun Qutb yulduzi osmonning aylanish o'qi ustida joylashgan. Kuzatuvchi qutbda tursa, bu o'q tepada (90°) bo'ladi; ekvatorda turgan kuzatuvchi uchun esa u gorizont chizig'ida (0°) bo'ladi. Shuning uchun balandlik kenglikka teng bo'ladi.</div>
+  </details>
+</section>
+
+<!-- 2-BAND -->
+<section class="card" id="s2">
+  <h2>2. Qadimgi dunyo va O'rta asr Sharq olimlarining hissasi</h2>
+  <p>Qadimgi Bobil va Misrda osmon kuzatuvlari asosida oy va quyosh kalendarlari tuzilgan, yulduz turkumlari (zodiak) ajratilgan. Miloddan avvalgi davrlarda ham osmon hodisalari muhim vaqt o'lchovi bo'lgan.</p>
+  <p><b>Ptolemey</b> (II asr) "Almagest" asarida Yer markazli dunyo tizimini bayon etdi. Bu model yana ming yildan ortiq hukmron bo'ldi.</p>
+  <p>IX–XV asrlarda Markaziy Osiyo olimlari astronomiyaga katta hissa qo'shdi. <b>Al-Farg'oniy</b> (IX asr) astronomik jadvallar va Yer o'lchamiga oid asarlar yozdi. <b>Abu Rayhon Beruniy</b> (973–1048) Nandana tog'ida ufq pastligi burchagini o'lchab, Yer radiusini hisoblagan. <b>Mirzo Ulug'bek</b> (1394–1449) Samarqandda rasadxona qurdi, "Ziji Ulug'bek" jadvallarini tuzdi va 1018 ta yulduz katalogini yaratdi.</p>
+
+  <h3>Vaqt chizig'i: tarixiy voqealar</h3>
+  <p>Quyidagi tugmalardan birini bosing — shu olim yoki voqea haqida qisqa ma'lumot chiqadi.</p>
+  <div class="timeline" id="timeline"></div>
+  <div class="infobox" id="tlInfo">Tugmani tanlang.</div>
+
+  <h3>Simulyatsiya: Ptolemey → Kopernik → Kepler modellari</h3>
+  <p>Animatsiya har 7 soniyada modelni almashtiradi. Quyidagi tugmalar bilan qo'lda tanlashingiz mumkin.</p>
+  <canvas id="orbits" width="720" height="320"></canvas>
+  <div class="controls">
+    <div class="btns">
+      <button id="m0" class="tl-mode">Ptolemey (Yer markazli)</button>
+      <button id="m1" class="tl-mode">Kopernik (Quyosh markazli)</button>
+      <button id="m2" class="tl-mode">Kepler (ellips)</button>
+      <button id="autoBtn" class="primary">Avtomatik: yoqilgan</button>
+      <button id="pause2">❚❚ To'xtatish</button>
+    </div>
+    <label>Tezlik: <span id="speedVal">1.0</span>×
+      <input type="range" id="speed" min="0.2" max="3" step="0.1" value="1">
+    </label>
+  </div>
+  <div class="readout" id="modeLabel"></div>
+  <p class="note">Ptolemey modelida sayyoralar epitsikllar bilan Yer atrofida aylanadi (illyustrativ). Kopernik modelida Quyosh markazda. Kepler modelida Quyosh ellipsning fokusida; ellips shaklini ko'rsatish uchun ekssentrisitet ko'rgazmada kattalashtirilgan.</p>
+
+  <details class="why">
+    <summary>Nima uchun?</summary>
+    <div>Kopernik (1543) geliotsentrik modelni taklif qilganda, bu tizim Yer markazli modeldan ko'ra oddiyroq edi: sayyoralarning orqaga qaytma (retrograd) harakatini tushuntirish uchun murakkab epitsikllar kerak emas edi. Galiley (1609) teleskop orqali Yupiter yo'ldoshlarini kuzatib, Yer atrofida aylanmaydigan jismlar mavjudligini ko'rsatdi. Kepler (1609–1619) orbitalar aylana emas, ellips ekanligini va sayyoralar davri bilan orbita o'lchami orasida qonuniy bog'liqlik borligini aniqladi. Nyuton (1687) esa bu qonunlarni butunjahon tortishish qonuni bilan tushuntirdi.</div>
+  </details>
+</section>
+
+<!-- 3-BAND -->
+<section class="card" id="s3">
+  <h2>3. Astronomiyaning boshqa fanlar bilan aloqasi</h2>
+  <p>Astronomiya o'zi mustaqil fan bo'lsa-da, uning tadqiqotlari fizika, matematika, geografiya, kimyo va biologiya bilan chambarchas bog'liq. Bu fanlarning usullari osmon jismlarini o'rganish uchun qo'llaniladi, astronomik kashfiyotlar esa ular uchun yangi savollar beradi.</p>
+  <p>Masalan, yulduzgacha bo'lgan masofa uchburchaklar va trigonometriya yordamida hisoblanadi; yulduz nurining spektri esa uning kimyoviy tarkibini ochib beradi.</p>
+  <p>Yerdan tashqarida hayot izlanishi — <b>astrobiologiya</b> — esa biologiya va kimyoning yangi chegarasidir.</p>
+
+  <h3>Interaktiv diagramma: bog'lanishlar</h3>
+  <p>Tugunlarni (fanlarni) bosing — ular bilan bog'liq misol chiqadi.</p>
+  <svg viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg" aria-label="Astronomiya bog'lanishlari diagrammasi">
+    <g stroke="#334155" stroke-width="2">
+      <line x1="300" y1="170" x2="150" y2="70"/>
+      <line x1="300" y1="170" x2="450" y2="70"/>
+      <line x1="300" y1="170" x2="70" y2="170"/>
+      <line x1="300" y1="170" x2="530" y2="170"/>
+      <line x1="300" y1="170" x2="150" y2="280"/>
+    </g>
+    <g class="node" onclick="showNode(0)">
+      <circle cx="300" cy="170" r="48" fill="#0c4a6e" stroke="#38bdf8" stroke-width="2"/>
+      <text x="300" y="166" text-anchor="middle" fill="#e0f2fe" font-size="14" font-weight="700">Astronomiya</text>
+      <text x="300" y="184" text-anchor="middle" fill="#7dd3fc" font-size="11">markaz</text>
+    </g>
+    <g class="node" onclick="showNode(1)">
+      <circle cx="150" cy="70" r="40" fill="#161f30" stroke="#38bdf8"/>
+      <text x="150" y="75" text-anchor="middle" fill="#e2e8f0" font-size="14">Fizika</text>
+    </g>
+    <g class="node" onclick="showNode(2)">
+      <circle cx="450" cy="70" r="40" fill="#161f30" stroke="#38bdf8"/>
+      <text x="450" y="75" text-anchor="middle" fill="#e2e8f0" font-size="14">Matematika</text>
+    </g>
+    <g class="node" onclick="showNode(3)">
+      <circle cx="70" cy="170" r="40" fill="#161f30" stroke="#38bdf8"/>
+      <text x="70" y="175" text-anchor="middle" fill="#e2e8f0" font-size="14">Geografiya</text>
+    </g>
+    <g class="node" onclick="showNode(4)">
+      <circle cx="530" cy="170" r="40" fill="#161f30" stroke="#38bdf8"/>
+      <text x="530" y="170" text-anchor="middle" fill="#e2e8f0" font-size="14">Kimyo</text>
+      <text x="530" y="186" text-anchor="middle" fill="#94a3b8" font-size="11">spektroskopiya</text>
+    </g>
+    <g class="node" onclick="showNode(5)">
+      <circle cx="150" cy="280" r="40" fill="#161f30" stroke="#38bdf8"/>
+      <text x="150" y="285" text-anchor="middle" fill="#e2e8f0" font-size="14">Biologiya</text>
+    </g>
+  </svg>
+  <div class="infobox" id="nodeInfo">Diagrammadagi fanlardan birini bosing.</div>
+
+  <details class="why">
+    <summary>Nima uchun?</summary>
+    <div>Nega osmon jismlarini o'rganish boshqa fanlarga muhim? Chunki koinotdagi hodisalar fizika qonunlariga bo'ysunadi, ularni o'lchash esa matematik usullarni talab qiladi. Yulduz nurining spektrida geliy elementi avval Quyoshda topilgan, keyin Yerda; bu kimyo va fizikaning birgalikdagi natijasi. Shuning uchun astronomiya boshqa fanlar uchun "tabiiy laboratoriya" hisoblanadi.</div>
+  </details>
+</section>
+
+<!-- AMALIY TOPSHIRIQLAR -->
+<section class="card" id="tasks">
+  <h2>Amaliy topshiriqlar</h2>
+  <div class="task"><b>1-topshiriq.</b> Simulyatsiyada Samarqand kengligini (φ≈39.7°) tanlang. Qutb yulduzi balandligini toping va u kenglikka tengligini tekshiring. Keyin φ=0° va φ=90° uchun ham shunday qiling va natijalarni jadvalga yozing.</div>
+  <div class="task"><b>2-topshiriq.</b> Ptolemey va Kopernik modellarini taqqoslang: har biri uchun 2 ta afzallik va 2 ta kamchilikni yozing. Qaysi model sayyoralarning orqaga qaytma harakatini oddiyroq tushuntiradi?</div>
+  <div class="task"><b>3-topshiriq.</b> Beruniy usulini tasavvur qiling: tog' cho'qqisidan ufq pastligi burchagi 0.5° bo'lsa, tog' balandligi taxminan qancha? (Ipucha: ufq pastligi burchagi taxminan <i>h/R</i> ga teng, bu yerda R — Yer radiusi ≈ 6400 km.) Hisoblang va natijani Yer radiusi bilan solishtiring.</div>
+</section>
+
+<!-- TEST -->
+<section class="card quiz" id="test">
+  <h2>Test (5 savol)</h2>
+  <div class="q"><p>1. Astronomiya nimani o'rganadi?</p>
+    <label><input type="radio" name="q1" value="0"> Faqat yulduzlarning kimyoviy tarkibini</label>
+    <label><input type="radio" name="q1" value="1"> Osmon jismlari va koinotning tuzilishi hamda harakatini</label>
+    <label><input type="radio" name="q1" value="2"> Faqat Quyosh tizimini</label>
+  </div>
+  <div class="q"><p>2. Kuzatuv kengligi 40° bo'lsa, Qutb yulduzining balandligi qancha?</p>
+    <label><input type="radio" name="q2" value="0"> 0°</label>
+    <label><input type="radio" name="q2" value="1"> 40°</label>
+    <label><input type="radio" name="q2" value="2"> 90°</label>
+  </div>
+  <div class="q"><p>3. Beruniy Yer radiusini qaysi usul bilan hisoblagan?</p>
+    <label><input type="radio" name="q3" value="0"> Teleskop orqali Oy kraterlarini sanab</label>
+    <label><input type="radio" name="q3" value="1"> Tog' balandligidan ufq pastligi burchagini o'lchab</label>
+    <label><input type="radio" name="q3" value="2"> Kometalar orbitasini hisoblab</label>
+  </div>
+  <div class="q"><p>4. Ulug'bek rasadxonasi qaysi shaharda qurilgan?</p>
+    <label><input type="radio" name="q4" value="0"> Buxoro</label>
+    <label><input type="radio" name="q4" value="1"> Samarqand</label>
+    <label><input type="radio" name="q4" value="2"> Xiva</label>
+  </div>
+  <div class="q"><p>5. Kepler qonunlariga ko'ra sayyoralar orbitalari qanday shaklda?</p>
+    <label><input type="radio" name="q5" value="0"> Aylana</label>
+    <label><input type="radio" name="q5" value="1"> Kvadrat</label>
+    <label><input type="radio" name="q5" value="2"> Ellips</label>
+  </div>
+  <div class="btns"><button id="checkBtn" class="primary">Javoblarni tekshirish</button><button id="resetTest">Qayta boshlash</button></div>
+  <div id="result"></div>
+</section>
+
+<footer>Astronomiya · 11-sinf · 1-§</footer>
+</div>
+
+<script>
+/* ============ 1-BAND: OSMON SFERASI ============ */
+const cv1 = document.getElementById('sky'), c1 = cv1.getContext('2d');
+const W = 720, H = 300;
+const latS = document.getElementById('lat'), hourS = document.getElementById('hour');
+const latVal = document.getElementById('latVal'), hourVal = document.getElementById('hourVal');
+const readout1 = document.getElementById('readout1'), play1Btn = document.getElementById('play1');
+const stars = [
+  {name:"Qutb yulduzi", d:89.26, color:"#fde68a", r:5},
+  {name:"Vega", d:38.78, color:"#bae6fd", r:4},
+  {name:"Quyosh", d:0, color:"#fbbf24", r:7},
+  {name:"Sirius", d:-16.72, color:"#e0f2fe", r:4},
+  {name:"Antares", d:-26.43, color:"#f87171", r:4}
+];
+let playing1 = false;
+
+function coords(phi, d, HA){
+  const sinh = Math.sin(phi)*Math.sin(d) + Math.cos(phi)*Math.cos(d)*Math.cos(HA);
+  const alt = Math.asin(Math.max(-1, Math.min(1, sinh))) * 180/Math.PI;
+  const A = Math.atan2(Math.sin(HA), Math.cos(HA)*Math.sin(phi) - Math.tan(d)*Math.cos(phi));
+  let az = (A*180/Math.PI + 180) % 360;
+  if (az < 0) az += 360;
+  return {alt, az};
+}
+
+function drawSky(){
+  const phiDeg = +latS.value;
+  const phi = phiDeg * Math.PI/180;
+  const t = +hourS.value;
+  latVal.textContent = phiDeg;
+  hourVal.textContent = t.toFixed(2);
+
+  const toX = az => az/360 * W;
+  const toY = alt => H/2 - alt/90 * (H/2);
+
+  c1.clearRect(0,0,W,H);
+  c1.fillStyle = "#0f172a"; c1.fillRect(0,0,W,H);
+  c1.fillStyle = "#111a2b"; c1.fillRect(0,H/2,W,H/2);
+
+  c1.strokeStyle = "rgba(148,163,184,0.12)"; c1.lineWidth = 1;
+  for (let a=0; a<=360; a+=45){ c1.beginPath(); c1.moveTo(toX(a),0); c1.lineTo(toX(a),H); c1.stroke(); }
+
+  // gorizont
+  c1.strokeStyle = "#38bdf8"; c1.lineWidth = 2;
+  c1.beginPath(); c1.moveTo(0,H/2); c1.lineTo(W,H/2); c1.stroke();
+
+  // Qutb yulduzi balandligi chizig'i: h = phi
+  c1.setLineDash([6,6]); c1.strokeStyle = "#fde68a"; c1.lineWidth = 1.2;
+  c1.beginPath(); c1.moveTo(0,toY(phiDeg)); c1.lineTo(W,toY(phiDeg)); c1.stroke();
+  c1.setLineDash([]);
+  c1.fillStyle = "#fde68a"; c1.font = "12px system-ui, sans-serif";
+  c1.fillText("h = φ = " + phiDeg + "°", 8, toY(phiDeg) - 6);
+
+  // yo'nalish belgilari
+  c1.fillStyle = "#94a3b8"; c1.font = "13px system-ui, sans-serif";
+  const dirs = [["N",0],["E",90],["S",180],["W",270],["N",360]];
+  dirs.forEach(([l,a]) => c1.fillText(l, toX(a)+4, H-8));
+
+  // trayektoriyalar
+  stars.forEach(s => {
+    const d = s.d * Math.PI/180;
+    c1.beginPath();
+    let prevAz = null, started = false;
+    for (let i=0; i<=360; i++){
+      const HA = i/360 * 2*Math.PI;
+      const {alt, az} = coords(phi, d, HA);
+      const x = toX(az), y = toY(alt);
+      if (!started || Math.abs(az - prevAz) > 180){ c1.moveTo(x,y); started = true; }
+      else c1.lineTo(x,y);
+      prevAz = az;
+    }
+    c1.strokeStyle = s.color + "55"; c1.lineWidth = 1.5; c1.stroke();
+  });
+
+  // joriy holat
+  const HA = t/24 * 2*Math.PI;
+  let html = "";
+  stars.forEach(s => {
+    const {alt, az} = coords(phi, s.d*Math.PI/180, HA);
+    const x = toX(az), y = toY(alt);
+    c1.fillStyle = s.color;
+    c1.beginPath(); c1.arc(x, y, s.r, 0, 2*Math.PI); c1.fill();
+    c1.fillStyle = "#e2e8f0"; c1.font = "12px system-ui, sans-serif";
+    c1.fillText(s.name, x+8, y-6);
+    html += `<span>${s.name}: <b>h=${alt.toFixed(1)}°</b>, A=${az.toFixed(0)}°</span>`;
+  });
+  readout1.innerHTML = html;
+}
+
+function loop1(){
+  if (playing1){
+    let t = +hourS.value + 0.08;
+    if (t >= 24) t -= 24;
+    hourS.value = t.toFixed(2);
+  }
+  drawSky();
+  requestAnimationFrame(loop1);
+}
+latS.addEventListener('input', drawSky);
+hourS.addEventListener('input', drawSky);
+play1Btn.addEventListener('click', () => {
+  playing1 = !playing1;
+  play1Btn.textContent = playing1 ? "❚❚ To'xtatish" : "▶ Boshlash";
+});
+document.getElementById('reset1').addEventListener('click', () => { hourS.value = 0; drawSky(); });
+document.getElementById('samarqand').addEventListener('click', () => { latS.value = 40; drawSky(); });
+document.getElementById('ekvator').addEventListener('click', () => { latS.value = 0; drawSky(); });
+document.getElementById('qutb').addEventListener('click', () => { latS.value = 90; drawSky(); });
+loop1();
+
+/* ============ 2-BAND: VAQT CHIZIG'I ============ */
+const events = [
+  {y:"II asr", t:"Ptolemey", txt:"<strong>Ptolemey</strong> \"Almagest\" asarida Yer markazli dunyo tizimini bayon etdi. Bu model qariyb 1400 yil hukmron bo'lgan."},
+  {y:"IX asr", t:"Al-Farg'oniy", txt:"<strong>Al-Farg'oniy</strong> astronomik jadvallar tuzdi va Yer o'lchamlari haqidagi hisob-kitoblarga hissa qo'shdi."},
+  {y:"973–1048", t:"Beruniy", txt:"<strong>Abu Rayhon Beruniy</strong> Nandana tog'ida ufq pastligi burchagini o'lchab, Yer radiusini hisoblagan."},
+  {y:"1394–1449", t:"Ulug'bek", txt:"<strong>Mirzo Ulug'bek</strong> Samarqand rasadxonasini qurdi, \"Ziji Ulug'bek\" jadvallarini tuzdi va 1018 ta yulduz katalogini yaratdi."},
+  {y:"1543", t:"Kopernik", txt:"<strong>Nikolay Kopernik</strong> geliotsentrik modelni e'lon qildi: Yer va boshqa sayyoralar Quyosh atrofida aylanadi."},
+  {y:"1609", t:"Galiley", txt:"<strong>Galileo Galiley</strong> teleskop orqali Oy yuzasini, Yupiter yo'ldoshlarini va Veneraning fazalarini kuzatdi."},
+  {y:"1609–1619", t:"Kepler", txt:"<strong>Iogann Kepler</strong> sayyoralar orbitalari ellips ekanligini va davr bilan o'lcham o'rtasidagi qonunni aniqladi."},
+  {y:"1687", t:"Nyuton", txt:"<strong>Isaak Nyuton</strong> \"Principia\" asarida butunjahon tortishish qonunini ta'riflab, osmon va yer jismlari harakatini bir nazariyada birlashtirdi."}
+];
+const tlWrap = document.getElementById('timeline'), tlInfo = document.getElementById('tlInfo');
+events.forEach((e,i) => {
+  const b = document.createElement('button');
+  b.className = 'tl'; b.textContent = e.y + " · " + e.t;
+  b.addEventListener('click', () => {
+    tlInfo.innerHTML = e.txt;
+    [...tlWrap.children].forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+  });
+  tlWrap.appendChild(b);
+});
+
+const cv2 = document.getElementById('orbits'), c2 = cv2.getContext('2d');
+const W2 = 720, H2 = 320, CX = 360, CY = 160;
+const modeNames = ["Ptolemey: Yer markazli model (epitsikllar)", "Kopernik: Quyosh markazli model (aylanalar)", "Kepler: Quyosh fokusida ellips orbitalar"];
+const planets = [
+  {name:"Venera", r:70,  T:0.62,  e:0.05, color:"#fde68a"},
+  {name:"Yer",    r:100, T:1,     e:0.10, color:"#60a5fa"},
+  {name:"Mars",   r:135, T:1.88,  e:0.30, color:"#f87171"},
+  {name:"Yupiter",r:190, T:11.86, e:0.15, color:"#fdba74"}
+];
+let mode = 0, autoMode = true, pausedAnim = false, timeAnim = 0, lastSwitch = 0, speed = 1;
+const speedS = document.getElementById('speed'), speedVal = document.getElementById('speedVal');
+const modeLabel = document.getElementById('modeLabel'), autoBtn = document.getElementById('autoBtn');
+const modeBtns = [0,1,2].map(i => document.getElementById('m'+i));
+
+function setMode(m){
+  mode = m;
+  modeBtns.forEach((b,i) => b.classList.toggle('active', i===m));
+  modeLabel.innerHTML = `<span>Model: <b>${modeNames[m]}</b></span>`;
+}
+modeBtns.forEach((b,i) => b.addEventListener('click', () => { setMode(i); autoMode = false; autoBtn.textContent = "Avtomatik: o'chirilgan"; autoBtn.classList.remove('primary'); }));
+autoBtn.addEventListener('click', () => {
+  autoMode = !autoMode;
+  autoBtn.textContent = autoMode ? "Avtomatik: yoqilgan" : "Avtomatik: o'chirilgan";
+  autoBtn.classList.toggle('primary', autoMode);
+});
+document.getElementById('pause2').addEventListener('click', e => {
+  pausedAnim = !pausedAnim;
+  e.target.textContent = pausedAnim ? "▶ Davom ettirish" : "❚❚ To'xtatish";
+});
+speedS.addEventListener('input', () => { speed = +speedS.value; speedVal.textContent = speed.toFixed(1); });
+
+function solveKepler(M, e){
+  let E = M;
+  for (let i=0;i<7;i++) E -= (E - e*Math.sin(E) - M) / (1 - e*Math.cos(E));
+  return E;
+}
+
+function drawOrbits(){
+  c2.clearRect(0,0,W2,H2);
+  c2.fillStyle = "#0f172a"; c2.fillRect(0,0,W2,H2);
+
+  if (mode === 0){
+    // Yer markazda
+    c2.fillStyle = "#60a5fa"; c2.beginPath(); c2.arc(CX,CY,8,0,2*Math.PI); c2.fill();
+    c2.fillStyle = "#94a3b8"; c2.font = "12px system-ui, sans-serif"; c2.fillText("Yer", CX+12, CY+4);
+    const ang = 2*Math.PI*timeAnim/6;
+    const sunR = 75;
+    planets.forEach((p,i) => {
+      if (p.name === "Yer") return;
+      const Rd = p.r * 0.55, re = p.r * 0.18;
+      const wd = 2*Math.PI*timeAnim/(p.T*6), we = -wd*3;
+      const cx = CX + Rd*Math.cos(wd), cy = CY + Rd*Math.sin(wd);
+      c2.strokeStyle = "rgba(148,163,184,0.2)"; c2.beginPath(); c2.arc(cx,cy,re,0,2*Math.PI); c2.stroke();
+      const px = cx + re*Math.cos(we), py = cy + re*Math.sin(we);
+      c2.fillStyle = p.color; c2.beginPath(); c2.arc(px,py,5,0,2*Math.PI); c2.fill();
+      c2.fillStyle = "#cbd5e1"; c2.fillText(p.name, px+8, py-6);
+    });
+    const sx = CX + sunR*Math.cos(ang), sy = CY + sunR*Math.sin(ang);
+    c2.fillStyle = "#fbbf24"; c2.beginPath(); c2.arc(sx,sy,9,0,2*Math.PI); c2.fill();
+    c2.fillStyle = "#cbd5e1"; c2.fillText("Quyosh", sx+11, sy+4);
+  }
+  else if (mode === 1){
+    c2.fillStyle = "#fbbf24"; c2.beginPath(); c2.arc(CX,CY,12,0,2*Math.PI); c2.fill();
+    c2.fillStyle = "#94a3b8"; c2.fillText("Quyosh", CX+16, CY+4);
+    planets.forEach(p => {
+      const a = p.r*0.75;
+      c2.strokeStyle = "rgba(148,163,184,0.2)"; c2.beginPath(); c2.arc(CX,CY,a,0,2*Math.PI); c2.stroke();
+      const th = 2*Math.PI*timeAnim/(p.T*6);
+      const x = CX + a*Math.cos(th), y = CY + a*Math.sin(th);
+      c2.fillStyle = p.color; c2.beginPath(); c2.arc(x,y,6,0,2*Math.PI); c2.fill();
+      c2.fillStyle = "#cbd5e1"; c2.fillText(p.name, x+9, y-6);
+    });
+  }
+  else {
+    // Kepler ellipslari, Quyosh fokusda
+    c2.fillStyle = "#fbbf24"; c2.beginPath(); c2.arc(CX,CY,12,0,2*Math.PI); c2.fill();
+    c2.fillStyle = "#94a3b8"; c2.fillText("Quyosh (fokus)", CX+16, CY+4);
+    planets.forEach(p => {
+      const a = p.r*0.75, e = p.e, b = a*Math.sqrt(1-e*e);
+      c2.strokeStyle = "rgba(148,163,184,0.25)"; c2.beginPath();
+      for (let i=0;i<=120;i++){
+        const E = i/120*2*Math.PI;
+        const x = CX + a*(Math.cos(E)-e), y = CY + b*Math.sin(E);
+        i===0 ? c2.moveTo(x,y) : c2.lineTo(x,y);
+      }
+      c2.stroke();
+      const M = 2*Math.PI*timeAnim/(p.T*6);
+      const E = solveKepler(M % (2*Math.PI), e);
+      const x = CX + a*(Math.cos(E)-e), y = CY + b*Math.sin(E);
+      c2.fillStyle = p.color; c2.beginPath(); c2.arc(x,y,6,0,2*Math.PI); c2.fill();
+      c2.fillStyle = "#cbd5e1"; c2.fillText(p.name, x+9, y-6);
+    });
+  }
+}
+
+let lastTs = null;
+function loop2(ts){
+  if (lastTs === null) lastTs = ts;
+  const dt = Math.min(0.05, (ts - lastTs)/1000); lastTs = ts;
+  if (!pausedAnim) timeAnim += dt * speed;
+  if (autoMode && timeAnim - lastSwitch > 7){
+    lastSwitch = timeAnim;
+    setMode((mode+1)%3);
+  }
+  drawOrbits();
+  requestAnimationFrame(loop2);
+}
+setMode(0);
+autoBtn.classList.add('primary');
+requestAnimationFrame(loop2);
+
+/* ============ 3-BAND: DIAGRAMMA ============ */
+const nodeData = [
+  {t:"Astronomiya", txt:"Osmon jismlarini o'rganishning markaziy fani. Boshqa barcha bog'lanishlar shu yerdan boshlanadi."},
+  {t:"Fizika", txt:"<strong>Misol:</strong> Oy va Quyosh tortishishi tufayli dengizlarda suv ko'tarilishi (prilivlar) yuzaga keladi. Nyutonning tortishish qonuni shu hodisani tushuntiradi."},
+  {t:"Matematika", txt:"<strong>Misol:</strong> Parallaks usuli bilan uchburchak va trigonometriya yordamida yaqin yulduzgacha bo'lgan masofa hisoblanadi."},
+  {t:"Geografiya", txt:"<strong>Misol:</strong> Yulduzlar va Quyosh balandligiga qarab kuzatuv joyining kengligi aniqlanadi; vaqt mintaqalari Yerning aylanishiga asoslangan."},
+  {t:"Kimyo", txt:"<strong>Misol:</strong> Yulduz nuri spektridagi chiziqlardan uning tarkibidagi vodorod, geliy va boshqa elementlar aniqlanadi. Geliy avval Quyosh spektrida topilgan."},
+  {t:"Biologiya", txt:"<strong>Misol:</strong> Astrobiologiya Mars yoki Yupiter yo'ldoshi Yevropa kabi muzli jismlarda hayot izlaydi, Yerdagi hayot shartlarini esa tadqiq qiladi."}
+];
+function showNode(i){
+  document.getElementById('nodeInfo').innerHTML = `<strong>${nodeData[i].t}</strong><br>${nodeData[i].txt}`;
+}
+window.showNode = showNode;
+
+/* ============ TEST ============ */
+const answers = {q1:"1", q2:"1", q3:"1", q4:"1", q5:"2"};
+document.getElementById('checkBtn').addEventListener('click', () => {
+  let score = 0;
+  for (const q in answers){
+    const sel = document.querySelector(`input[name="${q}"]:checked`);
+    const ok = sel && sel.value === answers[q];
+    if (ok) score++;
+  }
+  const res = document.getElementById('result');
+  res.className = score >= 4 ? 'good' : 'bad';
+  res.textContent = `Natija: ${score} / 5` + (score === 5 ? " — a'lo!" : score >= 4 ? " — yaxshi!" : " — mavzuni qayta ko'rib chiqing.");
+});
+document.getElementById('resetTest').addEventListener('click', () => {
+  document.querySelectorAll('#test input[type=radio]').forEach(r => r.checked = false);
+  const res = document.getElementById('result'); res.textContent = ""; res.className = "";
+});
+</script>
+</body>
+</html>
